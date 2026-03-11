@@ -22,6 +22,9 @@ Struktur:
 Detaljert guide for nye routes/repos:
 - `docs/IMPLEMENTATION_GUIDE.md`
 
+Lærlingoppgave:
+- `docs/ASSIGNMENT_MET_AND_FAVORITES.md`
+
 ## Kjøring
 
 ```bash
