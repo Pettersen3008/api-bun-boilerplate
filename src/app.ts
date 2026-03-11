@@ -1,12 +1,19 @@
 import express from "express";
-import { healthRouter } from "./routes/health";
+import { db } from "./provider/db";
+import { env } from "./provider/config";
+import { createHealthRouter } from "./routes/health";
 import { usersRouter } from "./routes/users";
 import { sendProblem } from "./utils/problem";
-import { env } from "./provider/config";
 
 export const app = express();
 
 app.use(express.json({ limit: env.BODY_LIMIT_BYTES }));
+
+const healthRouter = createHealthRouter({
+  pingDb: async () => {
+    await db`SELECT 1`;
+  },
+});
 
 app.use("/healthz", healthRouter);
 app.use("/api/v1/users", usersRouter);

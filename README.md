@@ -1,8 +1,14 @@
 # API (Bun + Express + Zod + Postgres)
 
-Enkel API-struktur med fokus på Problem Details-standard for feil:
+Enkel API-struktur med fokus på:
+- Problem Details-standard for feil (`application/problem+json`)
+- Object-oriented design i repos
+- Dependency injection (constructor-injeksjon)
+
+Struktur:
 - `src/provider/config.ts`
 - `src/provider/db.ts`
+- `src/provider/http.ts`
 - `src/provider/cache.ts` (stubber / interfaces)
 - `src/repo/*.ts`
 - `src/request/*.ts` (validering/sanitering)
@@ -12,6 +18,9 @@ Enkel API-struktur med fokus på Problem Details-standard for feil:
 - `src/index.ts` (server bootstrap)
 - `src/migrations/*.sql`
 - `src/migrations/migrate.ts`
+
+Detaljert guide for nye routes/repos:
+- `docs/IMPLEMENTATION_GUIDE.md`
 
 ## Kjøring
 
