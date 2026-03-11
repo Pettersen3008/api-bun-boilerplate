@@ -11,15 +11,20 @@
     "test": "bun test",
     "test:contract": "bun test test/openapi.contract.test.ts",
     "test:coverage": "bun test --coverage",
+    "bench:express": "BENCH_PORT=3101 bun bench/express.server.ts",
+    "bench:elysia": "BENCH_PORT=3102 bun bench/elysia.server.ts",
+    "bench:run": "bash bench/run-benchmark.sh",
     "typecheck": "bunx tsc --noEmit",
     "ci:check": "bun run typecheck && bun run test:coverage"
   },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/express": "^5.0.6",
+    "autocannon": "^8.0.0",
     "typescript": "^5"
   },
   "dependencies": {
+    "elysia": "^1.4.27",
     "express": "^5.2.1",
     "zod": "^4.3.6"
   }
