@@ -18,8 +18,7 @@ export function createExampleRouter(deps: { repo: IExampleRepo }): Router {
       return res.status(200).json({ data });
     } catch (error) {
       if (error instanceof ZodError) {
-        return sendProblem(res, {
-          type: "https://httpstatuses.com/400",
+        return sendProblem(req, res, {
           title: "Bad Request",
           status: 400,
           detail: "Invalid query parameters",

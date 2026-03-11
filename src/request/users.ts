@@ -6,8 +6,13 @@ const sanitizeName = (value: string): string =>
     .trim()
     .replace(/\s+/g, " ");
 
+const EmailSchema = z
+  .string()
+  .transform((value) => value.trim().toLowerCase())
+  .pipe(z.string().email());
+
 export const CreateUserSchema = z.object({
-  email: z.string().trim().toLowerCase().email(),
+  email: EmailSchema,
   fullName: z.string().min(2).max(120).transform(sanitizeName),
 });
 

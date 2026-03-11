@@ -1,31 +1,28 @@
 # API (Bun + Express + Zod + Postgres)
 
-Enkel API-struktur med fokus på:
-- Problem Details-standard for feil (`application/problem+json`)
-- Object-oriented design i repos
-- Dependency injection (constructor-injeksjon)
+API med fokus på:
+- Strict typed env + hard validation at startup
+- Env-driven Problem Type URIs (RFC 9457 style)
+- Problem Details (`application/problem+json`) for all errors
+- Object-oriented repos + dependency injection
+- DB-backed opaque session tokens (no JWT in v1)
+- Structured logging + optional cache provider
 
-Struktur:
+## Structure
+
 - `src/provider/config.ts`
 - `src/provider/db.ts`
 - `src/provider/http.ts`
-- `src/provider/cache.ts` (stubber / interfaces)
+- `src/provider/cache.ts` (`noop`, `memory`, `redis`)
+- `src/provider/logger.ts`
+- `src/middleware/*.ts` (auth/rate-limit/request-logging)
 - `src/repo/*.ts`
-- `src/request/*.ts` (validering/sanitering)
+- `src/request/*.ts`
 - `src/routes/*.ts`
 - `src/utils/*.ts`
-- `src/app.ts` (Express-oppsett)
-- `src/index.ts` (server bootstrap)
 - `src/migrations/*.sql`
-- `src/migrations/migrate.ts`
 
-Detaljert guide for nye routes/repos:
-- `docs/IMPLEMENTATION_GUIDE.md`
-
-Lærlingoppgave:
-- `docs/ASSIGNMENT_MET_AND_FAVORITES.md`
-
-## Kjøring
+## Run
 
 ```bash
 bun install
@@ -35,13 +32,28 @@ bun run migrate
 bun run dev
 ```
 
-## Endepunkter
+## Endpoints
 
-- `GET /healthz`
-- `GET /api/v1/users?limit=20&offset=0`
-- `GET /api/v1/users/:id`
-- `POST /api/v1/users`
+- `GET /healthz` (liveness)
+- `GET /healthz/readyz` (readiness)
+- `POST /api/v1/auth/register`
+- `POST /api/v1/auth/login`
+- `POST /api/v1/auth/logout` (Bearer)
+- `GET /api/v1/users?limit=20&offset=0` (Bearer)
+- `GET /api/v1/users/:id` (Bearer)
+- `POST /api/v1/users` (Bearer)
+- `GET /api/v1/example` (template route for new features)
 
-## Feilformat
+## Key env
 
-Alle API-feil returneres som `application/problem+json` (Problem Details).
+- `CACHE_MODE`: `noop|memory|redis`
+- `AUTH_RATE_LIMIT_*` and `GLOBAL_RATE_LIMIT_*`
+- `SESSION_TTL_SECONDS`, password policy/hash settings
+
+## Quality gates
+
+```bash
+bun run ci:check
+bun run test:coverage
+bun run migrate:smoke
+```

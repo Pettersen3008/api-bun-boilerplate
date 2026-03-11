@@ -19,8 +19,7 @@ export function createUsersRouter(deps: { repo: IUsersRepo }): Router {
       return res.status(200).json({ data: users });
     } catch (error) {
       if (error instanceof ZodError) {
-        return sendProblem(res, {
-          type: "https://httpstatuses.com/400",
+        return sendProblem(req, res, {
           title: "Bad Request",
           status: 400,
           detail: "Invalid query parameters",
@@ -38,8 +37,7 @@ export function createUsersRouter(deps: { repo: IUsersRepo }): Router {
       const user = await deps.repo.getById(params.id);
 
       if (!user) {
-        return sendProblem(res, {
-          type: "https://httpstatuses.com/404",
+        return sendProblem(req, res, {
           title: "Not Found",
           status: 404,
           detail: "User not found",
@@ -49,8 +47,7 @@ export function createUsersRouter(deps: { repo: IUsersRepo }): Router {
       return res.status(200).json({ data: user });
     } catch (error) {
       if (error instanceof ZodError) {
-        return sendProblem(res, {
-          type: "https://httpstatuses.com/400",
+        return sendProblem(req, res, {
           title: "Bad Request",
           status: 400,
           detail: "Invalid path parameters",
@@ -70,8 +67,7 @@ export function createUsersRouter(deps: { repo: IUsersRepo }): Router {
       return res.status(201).json({ data: user });
     } catch (error) {
       if (error instanceof ZodError) {
-        return sendProblem(res, {
-          type: "https://httpstatuses.com/422",
+        return sendProblem(req, res, {
           title: "Unprocessable Entity",
           status: 422,
           detail: "Validation failed",
@@ -81,8 +77,7 @@ export function createUsersRouter(deps: { repo: IUsersRepo }): Router {
 
       const maybePgError = error as { code?: string };
       if (maybePgError.code === "23505") {
-        return sendProblem(res, {
-          type: "https://httpstatuses.com/409",
+        return sendProblem(req, res, {
           title: "Conflict",
           status: 409,
           detail: "User already exists",
