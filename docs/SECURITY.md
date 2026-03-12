@@ -38,7 +38,7 @@
 2. Ownership must be derived from auth context, never client-supplied user id
 3. External HTTP failures must be mapped to safe API errors (no internal leakage)
 4. DB writes must be parameterized; no string-concatenated SQL
-5. Dependency audit (`bun audit`) must pass in CI
+5. Dependency audit (`bun audit --audit-level=high`) must pass in CI
 
 ## SQL safety
 
