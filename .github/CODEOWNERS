@@ -1,8 +1,1 @@
 * @Pettersen3008
-
-# Explicit ownership for CI/CD, rules, and security-sensitive files.
-.github/** @Pettersen3008
-docs/SECURITY.md @Pettersen3008
-bunfig.toml @Pettersen3008
-package.json @Pettersen3008
-bun.lock @Pettersen3008
