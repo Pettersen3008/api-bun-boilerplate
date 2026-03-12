@@ -7,7 +7,7 @@ Concise contributor/agent rules for this API boilerplate.
 - Runtime/tooling: Bun
 - HTTP server: Express
 - Validation: Zod
-- Database: Postgres via Bun SQL
+- Database: Postgres (prod/dev) + SQLite in-memory (test/CI) via DB adapter
 - Cache: in-memory or Redis via provider abstraction
 
 ## Conventions
@@ -23,7 +23,7 @@ Concise contributor/agent rules for this API boilerplate.
 
 ## SQL and security
 
-- Parameterize all runtime SQL with tagged templates.
+- Parameterize all runtime SQL with DB adapter placeholders (`?`).
 - Never concatenate user input into SQL.
 - `unsafe()` only for trusted migration file execution.
 - Do not log secrets or credentials.

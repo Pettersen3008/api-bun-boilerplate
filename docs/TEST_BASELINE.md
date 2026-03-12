@@ -19,21 +19,32 @@
 - OpenAPI spec path coverage checks
 - Problem Details/content-type checks on critical failure paths
 
+5. Integration + E2E tests
+- run with SQLite in-memory in test/CI
+- cover auth/session flow, protected endpoints, pagination traversal, and filter/sort behavior
+
 ## Current commands
 
 - Run all tests:
 ```bash
-bun test
+NODE_ENV=test DB_DRIVER=sqlite bun test --preload ./test/setup.ts
+```
+
+- Run suite by type:
+```bash
+bun run test:unit
+bun run test:integration
+bun run test:e2e
 ```
 
 - Run with coverage:
 ```bash
-bun run test:coverage
+NODE_ENV=test DB_DRIVER=sqlite bun test --coverage --preload ./test/setup.ts
 ```
 
 - Run contract tests only:
 ```bash
-bun run test:contract
+NODE_ENV=test DB_DRIVER=sqlite bun test test/openapi.contract.test.ts --preload ./test/setup.ts
 ```
 
 - CI local check:

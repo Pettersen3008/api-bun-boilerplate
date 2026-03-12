@@ -9,19 +9,22 @@
 
 ## Pagination rules
 
-Current list pagination uses `limit` + `offset`.
-
-Required behavior:
-- validate with Zod (`limit` min/max, `offset` min)
-- include meta in list responses:
+Standard list query contract:
+- `limit`, `cursor` (default mode), optional `offset` for approved internal/admin endpoints.
+- Validate with Zod (`limit`/`offset` bounds, mutually exclusive cursor/offset).
+- Include list meta:
+  - `meta.mode`
   - `meta.limit`
-  - `meta.offset`
   - `meta.count` (items in current page)
+  - `meta.nextCursor` in cursor mode
+  - `meta.offset` in offset mode
 
 ## Input normalization
 
 - Trim and normalize user-controlled strings where relevant
 - Lowercase fields that should be case-insensitive (for example email)
+- Reject unknown query parameters for list/filter/sort endpoints
+- Keep allowlist-only filter/sort params (no open-ended DSL)
 
 ## Backward compatibility
 

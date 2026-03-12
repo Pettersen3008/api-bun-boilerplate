@@ -19,6 +19,10 @@ This repository is a Bun API boilerplate with framework-specific app wiring (Exp
 - All errors must be returned as `application/problem+json`.
 5. Keep API contract updated
 - Update `openapi.json` when endpoint request/response contracts change.
+6. Keep list endpoints standardized
+- Use shared pagination/filter/sort query rules from `docs/API_BEHAVIOR_SPEC.md`.
+7. Keep repos DB-port based
+- Repos should depend on `appDb` (provider DB adapter), not concrete DB drivers.
 
 ## Where to start
 
@@ -27,7 +31,8 @@ Use these docs in order:
 2. `docs/SECURITY.md`
 3. `docs/RATE_LIMITING_AND_CACHING.md`
 4. `docs/TEST_BASELINE.md`
-5. `openapi.json`
+5. `docs/API_BEHAVIOR_SPEC.md`
+6. `openapi.json`
 
 ## Boilerplate starter files
 

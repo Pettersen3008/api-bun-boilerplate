@@ -30,7 +30,7 @@ Requirements:
 - Define `I<Feature>Repo`
 - Implement `class <Feature>Repo implements I<Feature>Repo`
 - Constructor-inject dependencies (`HttpClient`, cache, other repos)
-- Keep SQL parameterized through Bun SQL template tags
+- Keep SQL parameterized through DB adapter placeholders (`appDb.query/exec` + `?`)
 
 Use as base:
 - `src/repo/example.ts`
@@ -44,6 +44,7 @@ Requirements:
 - Parse request using schemas from `request/*`
 - Convert validation errors to `application/problem+json`
 - Keep route handlers thin; call repo methods
+- For list endpoints: use standardized `data + meta` envelope and allowlist filters/sort only
 
 Use as base:
 - `src/routes/example.ts`

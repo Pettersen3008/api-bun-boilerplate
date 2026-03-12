@@ -27,7 +27,7 @@ Project-specific guidance for coding agents in this repository.
 
 ## SQL safety (must follow)
 
-- Runtime queries must use Bun SQL tagged templates with placeholders.
+- Runtime queries must use parameterized placeholders through the DB adapter (`appDb.query/exec`).
 - Never build SQL via string concatenation.
 - `unsafe()` is only allowed for trusted migration file execution.
 

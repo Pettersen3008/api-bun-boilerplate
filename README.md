@@ -1,6 +1,6 @@
 # API Bun Express Boilerplate
 
-Production-oriented API boilerplate using Bun runtime, framework-pluggable app composition (Express/Elysia), Zod validation, Bun SQL for Postgres, and RFC 9457-style Problem Details.
+Production-oriented API boilerplate using Bun runtime, framework-pluggable app composition (Express/Elysia), Zod validation, DB adapter support (Postgres + SQLite for tests), and RFC 9457-style Problem Details.
 
 ## What this gives you
 
@@ -11,7 +11,7 @@ Production-oriented API boilerplate using Bun runtime, framework-pluggable app c
 - Global + auth-focused rate limiting middleware
 - Cache provider abstraction (`noop`, `memory`, `redis`)
 - Security headers + JSON content-type enforcement for write endpoints
-- Cursor + offset pagination support for users list endpoint
+- Standardized cursor-first pagination/filter/sort contract for list endpoints
 - SQL-first migration flow
 - Documentation and templates for fast feature delivery
 
@@ -21,7 +21,7 @@ Code is organized by responsibility:
 
 - `src/provider/*`:
   - `config.ts`: env parsing/validation
-  - `db.ts`: Bun SQL client
+  - `db.ts`: DB adapter (`postgres`/`sqlite`)
   - `http.ts`: outbound HTTP client abstraction
   - `cache.ts`: cache abstraction and implementations
   - `logger.ts`: structured logging
@@ -40,8 +40,9 @@ Code is organized by responsibility:
 - `POST /api/v1/auth/register`
 - `POST /api/v1/auth/login`
 - `POST /api/v1/auth/logout` (Bearer)
-- `GET /api/v1/users?limit=20&offset=0` (Bearer)
+- `GET /api/v1/users?limit=20` (Bearer, cursor-first default)
 - `GET /api/v1/users?limit=20&cursor=<token>` (Bearer)
+- `GET /api/v1/users?limit=20&offset=0` (Bearer, explicit offset mode)
 - `GET /api/v1/users/:id` (Bearer)
 - `POST /api/v1/users` (Bearer)
 - `GET /api/v1/example` (feature template route)
@@ -129,6 +130,7 @@ Project helper: `src/utils/problem.ts`.
 ## SQL safety rule
 
 - Runtime SQL must be parameterized with Bun tagged templates.
+- Runtime SQL must be parameterized through `appDb` placeholders.
 - No string-concatenated SQL.
 - `unsafe()` is only allowed for trusted migration file execution.
 
@@ -140,7 +142,7 @@ Common keys:
 
 - `NODE_ENV`, `APP_FRAMEWORK`, `HOST`, `PORT`
 - `TRUST_PROXY`
-- `DATABASE_URL`
+- `DB_DRIVER`, `DATABASE_URL`, `SQLITE_FILENAME`
 - `CACHE_MODE`, `REDIS_URL`
 - `SESSION_TTL_SECONDS`
 - `AUTH_RATE_LIMIT_*`, `GLOBAL_RATE_LIMIT_*`
@@ -153,6 +155,12 @@ Run these before commit/PR:
 bun run typecheck
 bun run test:coverage
 bun run migrate:smoke
+```
+
+Tests use SQLite in-memory by default:
+
+```bash
+NODE_ENV=test DB_DRIVER=sqlite bun test --preload ./test/setup.ts
 ```
 
 Or combined:
@@ -192,6 +200,7 @@ Use starter templates:
 - `docs/TEST_BASELINE.md`
 - `docs/OBSERVABILITY.md`
 - `docs/DATA_API_QUALITY.md`
+- `docs/API_BEHAVIOR_SPEC.md`
 - `docs/OPERATIONS.md`
 - `docs/API_VERSIONING.md`
 - `docs/PAGINATION.md`

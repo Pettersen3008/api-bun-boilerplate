@@ -41,24 +41,24 @@
 
 ## SQL safety
 
-Use Bun SQL tagged templates with placeholders for **all runtime values**.
+Use parameterized SQL with placeholders for **all runtime values**.
 
 Allowed (parameterized):
 
 ```ts
-await db`SELECT id FROM users WHERE email = ${email} LIMIT 1`;
-await db`INSERT INTO users (email, full_name) VALUES (${email}, ${fullName})`;
+await appDb.query("SELECT id FROM users WHERE email = ? LIMIT 1", [email]);
+await appDb.exec("INSERT INTO users (email, full_name) VALUES (?, ?)", [email, fullName]);
 ```
 
 Forbidden (string-concatenated SQL):
 
 ```ts
-await db.unsafe(`SELECT id FROM users WHERE email = '${email}'`);
+await appDb.query(`SELECT id FROM users WHERE email = '${email}'`);
 const sql = "INSERT INTO users (email) VALUES ('" + email + "')";
-await db.unsafe(sql);
+await appDb.exec(sql);
 ```
 
 Guardrail for `unsafe()`:
 - `unsafe()` is allowed only for trusted static SQL files in migration execution.
 - `unsafe()` must never receive request data, headers, query params, or other untrusted input.
-- Runtime API queries must always use parameterized tagged templates.
+- Runtime API queries must always use parameterized placeholders.
