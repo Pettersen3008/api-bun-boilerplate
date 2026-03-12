@@ -172,7 +172,7 @@ bun run test:contract
 1. Define request schemas in `src/request/<feature>.ts`
 2. Implement repo in `src/repo/<feature>.ts`
 3. Implement router in `src/routes/<feature>.ts`
-4. Mount route in `src/app.ts`
+4. Mount route in active app composition (`src/app.express.ts` or `src/app.elysia.ts`)
 5. Add tests in `test/*`
 
 Use starter templates:
