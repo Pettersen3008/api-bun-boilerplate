@@ -22,22 +22,13 @@ This document defines stable behavior for list endpoints in `/api/v1`.
 
 - Only whitelisted query params are allowed.
 - Unknown query params must return `400` Problem Details.
-- Supported operator style:
-  - equality: `field=value`
-  - in-list: `fieldIn=a,b,c`
-  - range: `fieldFrom`, `fieldTo`
-  - text: `q` (bounded length)
-- Sort contract:
-  - `sortBy` in endpoint allowlist
-  - `sortOrder` in `asc|desc`
-  - fallback to deterministic defaults when omitted
-  - for users, `sortBy!=createdAt` or `sortOrder=asc` requires `offset` mode
+- Users baseline currently does not expose endpoint-specific filter/sort params.
+- If added later, use endpoint allowlists only (no generic DSL).
 
 ### Bounds
 
 - `limit`: `1..100`
 - `offset`: `0..5000` (only where allowed)
-- `q`: max length `100`
 
 ## Error contract
 

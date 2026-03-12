@@ -39,13 +39,11 @@ Response meta:
 
 Cursor mode is preferred for high-volume pagination because it avoids expensive large offsets.
 
-## Filter/sort interaction
+## Query strictness
 
 - Allowed query fields are strict allowlist fields per endpoint.
 - Unknown query params must return `400`.
-- In cursor mode for users:
-  - `sortBy` must be `createdAt`
-  - `sortOrder` must be `desc`
+- Users baseline supports only `limit`, `cursor`, and `offset`.
 
 ## Ordering guarantee
 

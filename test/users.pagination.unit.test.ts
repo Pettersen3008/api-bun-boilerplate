@@ -19,8 +19,6 @@ describe("ListUsersQuerySchema", () => {
     const value = ListUsersQuerySchema.parse(normalizeQueryInput({
       limit: "15",
       cursor: "abc123",
-      sortBy: "createdAt",
-      sortOrder: "desc",
     }));
 
     expect(value.limit).toBe(15);
@@ -47,51 +45,11 @@ describe("ListUsersQuerySchema", () => {
     ).toThrow();
   });
 
-  test("parses sort and email filter", () => {
-    const value = ListUsersQuerySchema.parse(
-      normalizeQueryInput({
-        limit: "10",
-        offset: "0",
-        sortBy: "email",
-        sortOrder: "asc",
-        email: "a@example.com",
-      }),
-    );
-
-    expect(value.email).toBe("a@example.com");
-    expect(value.sortBy).toBe("email");
-    expect(value.sortOrder).toBe("asc");
-  });
-
-  test("rejects sortOrder asc in cursor-first mode without offset", () => {
+  test("rejects unknown params in strict mode", () => {
     expect(() =>
       ListUsersQuerySchema.parse(
         normalizeQueryInput({
-          sortOrder: "asc",
-        }),
-      ),
-    ).toThrow();
-  });
-
-  test("rejects non-createdAt sort in cursor mode", () => {
-    expect(() =>
-      ListUsersQuerySchema.parse(
-        normalizeQueryInput({
-          limit: "10",
-          cursor: "abc123",
-          sortBy: "email",
-          sortOrder: "desc",
-        }),
-      ),
-    ).toThrow();
-  });
-
-  test("rejects createdFrom after createdTo", () => {
-    expect(() =>
-      ListUsersQuerySchema.parse(
-        normalizeQueryInput({
-          createdFrom: "2026-03-12T12:00:00.000Z",
-          createdTo: "2026-03-11T12:00:00.000Z",
+          q: "search",
         }),
       ),
     ).toThrow();

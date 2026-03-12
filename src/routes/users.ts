@@ -18,12 +18,6 @@ export function createUsersRouter(deps: { repo: IUsersRepo }): Router {
         const users = await deps.repo.listByOffset({
           limit: query.limit,
           offset: query.offset,
-          q: query.q,
-          email: query.email,
-          createdFrom: query.createdFrom,
-          createdTo: query.createdTo,
-          sortBy: query.sortBy,
-          sortOrder: query.sortOrder,
         });
         return res.status(200).json({
           data: users,
@@ -40,12 +34,6 @@ export function createUsersRouter(deps: { repo: IUsersRepo }): Router {
       const users = await deps.repo.listByCursor(
         {
           limit: query.limit + 1,
-          q: query.q,
-          email: query.email,
-          createdFrom: query.createdFrom,
-          createdTo: query.createdTo,
-          sortBy: query.sortBy,
-          sortOrder: query.sortOrder,
         },
         decodedCursor,
       );

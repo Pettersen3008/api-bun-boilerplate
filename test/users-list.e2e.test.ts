@@ -53,16 +53,7 @@ describe("users list e2e", () => {
     expect(body.title).toBe("Bad Request");
   });
 
-  test("rejects sortOrder asc without offset mode", async () => {
-    const response = await fetch(`${baseUrl}/api/v1/users?limit=10&sortOrder=asc`, {
-      headers: { authorization: `Bearer ${token}` },
-    });
-
-    expect(response.status).toBe(400);
-    expect(response.headers.get("content-type")?.startsWith("application/problem+json")).toBe(true);
-  });
-
-  test("supports deterministic filtered and sorted result", async () => {
+  test("supports deterministic offset result", async () => {
     const users = [
       { email: "charlie@example.com", fullName: "Charlie" },
       { email: "alice@example.com", fullName: "Alice" },
@@ -81,26 +72,28 @@ describe("users list e2e", () => {
       expect(create.status).toBe(201);
     }
 
-    const response = await fetch(
-      `${baseUrl}/api/v1/users?limit=10&offset=0&q=example.com&sortBy=email&sortOrder=asc`,
-      {
-        headers: { authorization: `Bearer ${token}` },
-      },
-    );
+    const response = await fetch(`${baseUrl}/api/v1/users?limit=10&offset=0`, {
+      headers: { authorization: `Bearer ${token}` },
+    });
 
     expect(response.status).toBe(200);
     const body = (await response.json()) as {
-      data: Array<{ email: string }>;
+      data: Array<{ email: string; created_at: string; id: string }>;
       meta: { mode: string; limit: number; count: number };
     };
 
     expect(body.meta.mode).toBe("offset");
     expect(body.meta.limit).toBe(10);
-    expect(body.meta.count).toBe(3);
-    expect(body.data.map((entry) => entry.email)).toEqual([
-      "alice@example.com",
-      "bob@example.com",
-      "charlie@example.com",
-    ]);
+    expect(body.meta.count).toBe(4);
+    for (let index = 1; index < body.data.length; index += 1) {
+      const previous = body.data[index - 1];
+      const current = body.data[index];
+      expect(previous).toBeDefined();
+      expect(current).toBeDefined();
+      if (!previous || !current) continue;
+      const prevKey = `${previous.created_at}|${previous.id}`;
+      const currKey = `${current.created_at}|${current.id}`;
+      expect(prevKey >= currKey).toBe(true);
+    }
   });
 });

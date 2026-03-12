@@ -71,7 +71,7 @@ describe("auth + users integration", () => {
     expect(usersAfterLogout.status).toBe(401);
   });
 
-  test("users list supports cursor pagination + filters + sort", async () => {
+  test("users list supports cursor pagination", async () => {
     const token = await registerAndLogin(baseUrl);
 
     const create = async (email: string, fullName: string) => {
@@ -116,16 +116,15 @@ describe("auth + users integration", () => {
     });
     expect(cursorPageOne.status).toBe(200);
 
-    const filtered = await fetch(`${baseUrl}/api/v1/users?limit=10&offset=0&email=ada@example.com&sortBy=email&sortOrder=asc`, {
+    const offsetPage = await fetch(`${baseUrl}/api/v1/users?limit=2&offset=0`, {
       headers: { authorization: `Bearer ${token}` },
     });
-    expect(filtered.status).toBe(200);
-    const filteredBody = (await filtered.json()) as {
-      data: Array<{ email: string }>;
+    expect(offsetPage.status).toBe(200);
+    const offsetBody = (await offsetPage.json()) as {
+      data: Array<{ id: string }>;
       meta: { mode: string; count: number };
     };
-    expect(filteredBody.meta.mode).toBe("offset");
-    expect(filteredBody.meta.count).toBe(1);
-    expect(filteredBody.data[0]?.email).toBe("ada@example.com");
+    expect(offsetBody.meta.mode).toBe("offset");
+    expect(offsetBody.meta.count).toBe(2);
   });
 });

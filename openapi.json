@@ -191,39 +191,6 @@
             "in": "query",
             "schema": { "type": "string" },
             "description": "Cursor pagination mode. Cannot be combined with offset."
-          },
-          {
-            "name": "sortBy",
-            "in": "query",
-            "schema": { "type": "string", "enum": ["createdAt", "email", "fullName"], "default": "createdAt" },
-            "description": "Whitelisted sort field. Values other than createdAt require offset mode."
-          },
-          {
-            "name": "sortOrder",
-            "in": "query",
-            "schema": { "type": "string", "enum": ["asc", "desc"], "default": "desc" },
-            "description": "Sort direction. asc requires offset mode."
-          },
-          {
-            "name": "q",
-            "in": "query",
-            "schema": { "type": "string", "minLength": 1, "maxLength": 100 },
-            "description": "Bounded text search over email/full_name."
-          },
-          {
-            "name": "email",
-            "in": "query",
-            "schema": { "type": "string", "format": "email" }
-          },
-          {
-            "name": "createdFrom",
-            "in": "query",
-            "schema": { "type": "string", "format": "date-time" }
-          },
-          {
-            "name": "createdTo",
-            "in": "query",
-            "schema": { "type": "string", "format": "date-time" }
           }
         ],
         "responses": {
@@ -244,7 +211,7 @@
             }
           },
           "400": {
-            "description": "Invalid pagination, filter or sort query",
+            "description": "Invalid pagination query",
             "content": {
               "application/problem+json": {
                 "schema": { "$ref": "#/components/schemas/ProblemDetails" }

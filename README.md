@@ -11,7 +11,7 @@ Production-oriented API boilerplate using Bun runtime, framework-pluggable app c
 - Global + auth-focused rate limiting middleware
 - Cache provider abstraction (`noop`, `memory`, `redis`)
 - Security headers + JSON content-type enforcement for write endpoints
-- Standardized cursor-first pagination/filter/sort contract for list endpoints
+- Standardized cursor-first pagination contract for list endpoints
 - SQL-first migration flow
 - Documentation and templates for fast feature delivery
 

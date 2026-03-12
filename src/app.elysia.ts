@@ -432,12 +432,6 @@ export const appElysia = new Elysia()
         const users = await usersRepo.listByOffset({
           limit: query.limit,
           offset: query.offset,
-          q: query.q,
-          email: query.email,
-          createdFrom: query.createdFrom,
-          createdTo: query.createdTo,
-          sortBy: query.sortBy,
-          sortOrder: query.sortOrder,
         });
 
         return new Response(
@@ -464,12 +458,6 @@ export const appElysia = new Elysia()
       const users = await usersRepo.listByCursor(
         {
           limit: query.limit + 1,
-          q: query.q,
-          email: query.email,
-          createdFrom: query.createdFrom,
-          createdTo: query.createdTo,
-          sortBy: query.sortBy,
-          sortOrder: query.sortOrder,
         },
         decodedCursor,
       );
