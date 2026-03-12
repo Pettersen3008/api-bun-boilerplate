@@ -10,11 +10,14 @@
     "start:elysia": "APP_FRAMEWORK=elysia bun src/index.ts",
     "migrate": "bun src/migrations/migrate.ts",
     "migrate:smoke": "bun src/migrations/migrate.ts",
-    "test": "bun test",
-    "test:contract": "bun test test/openapi.contract.test.ts",
-    "test:coverage": "bun test --coverage",
+    "test": "NODE_ENV=test DB_DRIVER=sqlite bun test --preload ./test/setup.ts",
+    "test:unit": "NODE_ENV=test DB_DRIVER=sqlite bun test test/*.unit.test.ts --preload ./test/setup.ts",
+    "test:integration": "NODE_ENV=test DB_DRIVER=sqlite bun test test/*.integration.test.ts --preload ./test/setup.ts",
+    "test:e2e": "NODE_ENV=test DB_DRIVER=sqlite bun test test/*.e2e.test.ts --preload ./test/setup.ts",
+    "test:contract": "NODE_ENV=test DB_DRIVER=sqlite bun test test/openapi.contract.test.ts --preload ./test/setup.ts",
+    "test:coverage": "NODE_ENV=test DB_DRIVER=sqlite bun test --coverage --preload ./test/setup.ts",
     "typecheck": "bunx tsc --noEmit",
-    "ci:check": "bun run typecheck && bun run test:coverage"
+    "ci:check": "bun run typecheck && bun run test:unit && bun run test:integration && bun run test:e2e && bun run test:contract && bun run test:coverage"
   },
   "devDependencies": {
     "@types/bun": "latest",

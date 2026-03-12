@@ -34,6 +34,31 @@ describe("OpenAPI contract", () => {
     expect(paths.includes("/api/v1/users")).toBe(true);
   });
 
+  test("users list contract exposes standardized pagination/filter/sort parameters", async () => {
+    const raw = await Bun.file("openapi.json").text();
+    const spec = JSON.parse(raw) as {
+      paths?: {
+        [key: string]: {
+          get?: {
+            parameters?: Array<{ name?: string }>;
+          };
+        };
+      };
+    };
+
+    const params = spec.paths?.["/api/v1/users"]?.get?.parameters?.map((entry) => entry.name) ?? [];
+
+    expect(params.includes("limit")).toBe(true);
+    expect(params.includes("cursor")).toBe(true);
+    expect(params.includes("offset")).toBe(true);
+    expect(params.includes("sortBy")).toBe(true);
+    expect(params.includes("sortOrder")).toBe(true);
+    expect(params.includes("q")).toBe(true);
+    expect(params.includes("email")).toBe(true);
+    expect(params.includes("createdFrom")).toBe(true);
+    expect(params.includes("createdTo")).toBe(true);
+  });
+
   test("unknown route returns Problem Details with expected content-type", async () => {
     const response = await fetch(`${baseUrl}/does-not-exist`);
     const body = (await response.json()) as Record<string, unknown>;
