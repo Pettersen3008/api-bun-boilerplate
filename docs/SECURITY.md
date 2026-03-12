@@ -67,4 +67,7 @@ Guardrail for `unsafe()`:
 ## Dependency hardening
 
 - Dependabot is enabled for dependency/security update PRs.
+- Dependabot monitors both application dependencies and GitHub Actions dependencies.
+- CI workflows pin third-party actions by commit SHA.
+- Dependabot patch updates can be auto-merged after checks pass.
 - `bunfig.toml` sets `minimumReleaseAge = 604800` (7 days) to reduce supply-chain risk from freshly published versions.

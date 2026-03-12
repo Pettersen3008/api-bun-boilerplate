@@ -137,6 +137,9 @@ Project helper: `src/utils/problem.ts`.
 
 - CI fails on known dependency vulnerabilities via `bun audit`.
 - Dependabot is enabled (`.github/dependabot.yml`).
+- Dependabot also monitors GitHub Actions dependencies.
+- CI workflows pin actions by commit SHA.
+- Dependabot patch updates are configured for auto-merge (`.github/workflows/dependabot-auto-merge.yml`).
 - `bunfig.toml` enforces a 7-day minimum release age for dependencies.
 
 ## Env highlights
