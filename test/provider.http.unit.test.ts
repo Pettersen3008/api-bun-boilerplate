@@ -3,18 +3,22 @@ import { FetchHttpClient, HttpRequestError } from "../src/provider/http";
 
 const originalFetch = globalThis.fetch;
 
+function setMockFetch(fn: Parameters<typeof mock>[0]): void {
+  globalThis.fetch = mock(fn) as unknown as typeof fetch;
+}
+
 afterEach(() => {
   globalThis.fetch = originalFetch;
 });
 
 describe("FetchHttpClient", () => {
   test("returns parsed json on success", async () => {
-    globalThis.fetch = mock(async () =>
+    setMockFetch(async () =>
       new Response(JSON.stringify({ ok: true }), {
         status: 200,
         headers: { "content-type": "application/json" },
       })
-    ) as typeof fetch;
+    );
 
     const client = new FetchHttpClient();
     const result = await client.getJson<{ ok: boolean }>("https://example.com");
@@ -23,11 +27,11 @@ describe("FetchHttpClient", () => {
   });
 
   test("throws HttpRequestError with status on non-ok response", async () => {
-    globalThis.fetch = mock(async () =>
+    setMockFetch(async () =>
       new Response("bad", {
         status: 503,
       })
-    ) as typeof fetch;
+    );
 
     const client = new FetchHttpClient();
 
@@ -38,11 +42,11 @@ describe("FetchHttpClient", () => {
   });
 
   test("maps timeout errors to isTimeout=true", async () => {
-    globalThis.fetch = mock(async () => {
+    setMockFetch(async () => {
       const error = new Error("timeout");
       (error as { name?: string }).name = "TimeoutError";
       throw error;
-    }) as typeof fetch;
+    });
 
     const client = new FetchHttpClient();
 
@@ -52,9 +56,9 @@ describe("FetchHttpClient", () => {
   });
 
   test("maps generic failures to HttpRequestError", async () => {
-    globalThis.fetch = mock(async () => {
+    setMockFetch(async () => {
       throw new Error("network down");
-    }) as typeof fetch;
+    });
 
     const client = new FetchHttpClient();
 
@@ -64,4 +68,3 @@ describe("FetchHttpClient", () => {
     } satisfies Partial<HttpRequestError>);
   });
 });
-
