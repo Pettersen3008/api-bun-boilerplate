@@ -1,0 +1,2 @@
+
+// Her kan du lagre database spørringer. (Se src/repo/example.ts for eksempel på hvordan dette kan gjøres). Det er lurt å lage en egen repo for hver type data du skal hente, f.eks. metRepo for met dataen. Husk å lage en interface for repoet, og en default instance som kan brukes i resten av appen. Dette gjør det enklere å mocke repoet i tester, og gir bedre type-sikkerhet.
